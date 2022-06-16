@@ -25,13 +25,19 @@
 </template>
 
 <script>
+import dayjs from 'dayjs'
+
 export default {
     name: "Main",
     data: function() {
         return {
-            years: 0,
-            feature_count: 0,
-            name_count: 0
+            feature_count: "20,115",
+            name_count: "39,132"
+        }
+    },
+    computed: {
+        years: function() {
+            return dayjs().year() - 1992
         }
     }
 }

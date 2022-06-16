@@ -4,7 +4,9 @@ import Postgrest from 'vue-postgrest'
 
 import Main from "@/pages/Main.vue"
 import Search from "@/pages/Search.vue"
+import SearchResults from "@/pages/SearchResults.vue"
 import Download from "@/pages/Download.vue"
+import PlaceName from "@/pages/PlaceName.vue"
 import Information from "@/pages/Information.vue"
 import InformationGeneral from "@/pages/InformationGeneral.vue"
 import InformationBatchInstructions from "@/pages/InformationBatchInstructions.vue"
@@ -13,6 +15,9 @@ import InformationThemes from "@/pages/InformationThemes.vue"
 import InformationCGACharacteristics from "@/pages/InformationCGACharacteristics.vue"
 import InformationData from "@/pages/InformationData.vue"
 import InformationCitation from "@/pages/InformationCitation.vue"
+import InformationGlossary from "@/pages/InformationGlossary.vue"
+import InformationNamingAuthorities from "@/pages/InformationNamingAuthorities.vue"
+import InformationStatistics from "@/pages/InformationStatistics.vue"
 
 Vue.use(Router)
 Vue.use(Postgrest,
@@ -61,16 +66,36 @@ const router = new Router({
                 {
                     path: 'citation-information',
                     component: InformationCitation
+                },
+                {
+                    path: 'glossary',
+                    component: InformationGlossary
+                },
+                {
+                    path: 'naming-authorities',
+                    component: InformationNamingAuthorities
+                },
+                {
+                    path: 'statistics',
+                    component: InformationStatistics
                 }
             ]
         },
         {
             path: '/search',
-            component: Search
+            component: Search,
+        },
+        {
+            path: '/search/results',
+            component: SearchResults     
         },
         {
             path: '/download',
             component: Download
+        },
+        {
+            path: '/place_name/:id',
+            component: PlaceName
         }
     ]
 })

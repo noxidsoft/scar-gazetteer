@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+    api:
+      image: postgrest/postgrest:latest
+      environment:
+        - PGRST_DB_URI=postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}
+        - PGRST_DB_SCHEMA=gazetteer
+        - PGRST_DB_ANON_ROLE=${DB_ANON_ROLE}
+        - PGRST_JWT_SECRET=${JWT_SECRET}
+        - PGRST_LOG_LEVEL=info
+        - PGRST_PRE_REQUEST=gazetteer.authenticate
+      ports:
+        - "3000:3000"

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <b-container fluid="sm">
     <b-container id="header">
       <b-row>
         <b-col><img src="~@/assets/scar_logo_sm.gif" alt="S C A R" /></b-col>
@@ -40,7 +40,7 @@
 
     <router-view />
 
-  </div>
+  </b-container>
 </template>
 
 <script>
