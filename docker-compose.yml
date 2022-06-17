@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
     web:
-      image: aadc/scar-gazetteer:latest
+      image: scar/scar-gazetteer:latest
       build: scar-gazetteer/Dockerfile
     api:
       image: postgrest/postgrest:latest
