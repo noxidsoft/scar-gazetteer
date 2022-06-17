@@ -45,6 +45,7 @@
 
 <script>
 import qs from 'qs'
+import axios from 'axios'
 
 export default {
     name: "Search",
@@ -62,9 +63,7 @@ export default {
                 { value: 2, text: "Only Relics"},
             ],
             gazetteers: [
-                {value: null, text: "All Gazetteers"},
-                {value: 'AUS', text: 'Australia'},
-                {value: 'RUS', text: 'Russia'}
+                {value: null, text: "All Gazetteers"}
             ],
             form: {
                 search_text: "",
@@ -79,6 +78,16 @@ export default {
             event.preventDefault()
             this.$router.push(`/search/results?${qs.stringify(this.form)}`)
         }
+    },
+    mounted: async function() {
+        let response = await axios.get('/api/gazetteers')
+        let gaz = response.data
+
+        let formatted = gaz.map(g => {
+            return {value: g.gazetteer_code, text: g.country}
+        })
+
+        this.gazetteers = this.gazetteers.concat(formatted)
     }
 }
 </script>

@@ -29,15 +29,14 @@
               <b-navbar-brand href="/">SCAR Gazetteer</b-navbar-brand>
               <b-collapse id="nav-collapse" is-nav>
                 <b-navbar-nav>
-                  <b-nav-item href="/search"><b-icon-search /> Search</b-nav-item>
-                  <b-nav-item href="/information"><b-icon-info-circle-fill /> Information</b-nav-item>
+                  <b-nav-item to="/search"><b-icon-search /> Search</b-nav-item>
+                  <b-nav-item to="/information"><b-icon-info-circle-fill /> Information</b-nav-item>
                 </b-navbar-nav>
               </b-collapse>
           </b-navbar>
         </b-container>
       </div>
     </div>
-
     <router-view />
 
   </b-container>
@@ -56,4 +55,12 @@ export default {
 <style>
 @import '~@/assets/scar_gaz.css';
 @import '~@/assets/main.css';
+
+.navbar {
+  border-radius: 5px;
+}
+
+.navbar-brand {
+  padding-left: 1.5em
+}
 </style>

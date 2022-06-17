@@ -94,7 +94,7 @@ const router = new Router({
             component: Download
         },
         {
-            path: '/place_name/:id',
+            path: '/place-name/:id',
             component: PlaceName
         }
     ]

@@ -11,7 +11,7 @@
         <b-table :items="results" :fields="fields" >
             <template #cell(place_name_mapping)="p">
                 <div>
-                    <a :href="`/place_name/${p.item.name_id}`">{{p.item.place_name_mapping}} ({{p.item.gazetteer}})</a>
+                    <a :href="`/place-name/${p.item.name_id}`">{{p.item.place_name_mapping}} ({{p.item.gazetteer}})</a>
                     <b-badge>Place ID: {{p.item.place_id}}</b-badge>
                     <b-badge>Name ID: {{p.item.name_id}}</b-badge>
                 </div>
@@ -65,7 +65,13 @@ export default {
                 filter['feature_type_code.eq'] = `${this.$route.query.feature_type}`
             }
 
+            if(this.$route.query.relics == 1) {
+                filter['relic_flag.is'] = false
+            }
 
+            if(this.$route.query.relics == 2) {
+                filter['relic_flag.is'] = true
+            }
 
             return {
                 route: 'place_names',
