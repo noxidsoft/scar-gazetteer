@@ -32,7 +32,6 @@ services:
       - aadc-traefik-net
 
   api:
-    image: ${CONTAINER_IMAGE_API}
     deploy:
       mode: replicated
       replicas: 1
