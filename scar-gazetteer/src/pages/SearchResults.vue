@@ -8,6 +8,7 @@
 		</b-alert>
         <p>Page: {{ page }} of {{ total_pages }} - Total Results: {{count}}</p>
         <b-button @click="previous" :disabled="page == 1">Previous</b-button> <b-button @click="next" :disabled="page >= total_pages">Next</b-button>
+        <b-button @click="download"><b-icon-download /> Download</b-button>
         <b-table :items="results" :fields="fields" >
             <template #cell(place_name_mapping)="p">
                 <div>
@@ -22,6 +23,8 @@
 
 <script>
 import { pg } from 'vue-postgrest'
+import qs from 'qs'
+import axios from 'axios'
 
 export default {
     name: 'SearchResults',
@@ -51,6 +54,25 @@ export default {
         },
         pgConfig() {
 
+            let filter = this.parseFilter()
+
+            return {
+                route: 'place_names',
+                query: {
+                    select: ['place_name_mapping', 'gazetteer', 'place_id', 'name_id', 'latitude', 'longitude', 'feature_type_code'],
+                    and: filter,
+                    order: [
+                        ['place_name_mapping', 'asc']
+                    ],
+                    limit: 50,
+                    offset: (this.page -1) * this.page_size
+                },
+                count: 'exact'
+            }
+        }
+    },
+    methods: {
+        parseFilter: function() {
             let filter = {}
 
             if(this.$route.query.search_text) {
@@ -73,22 +95,8 @@ export default {
                 filter['relic_flag.is'] = true
             }
 
-            return {
-                route: 'place_names',
-                query: {
-                    select: ['place_name_mapping', 'gazetteer', 'place_id', 'name_id', 'latitude', 'longitude', 'feature_type_code'],
-                    and: filter,
-                    order: [
-                        ['place_name_mapping', 'asc']
-                    ],
-                    limit: 50,
-                    offset: (this.page -1) * this.page_size
-                },
-                count: 'exact'
-            }
-        }
-    },
-    methods: {
+            return filter
+        },
         next: function () {
 
             if(this.page >= this.total_pages) {
@@ -109,9 +117,26 @@ export default {
             const query = Object.assign({}, this.$route.query);
             query.page = parseInt(this.page) - 1;
             this.$router.push({ query });
+        },
+        download: function () {
+            let filter = this.parseFilter()
+
+            axios({
+                url: `/api/place_names?${qs.stringify(filter).replace('=','*').replace('.','=').replace('*','.')}`,
+                method: 'GET',
+                headers: {'Accept': 'text/csv'}
+            }).then((response) => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'scar-gazetteer.csv'); 
+                document.body.appendChild(link);
+                link.click();
+            });
         }
-    }
+    },
 }
+
 </script>
 
 <style scoped>

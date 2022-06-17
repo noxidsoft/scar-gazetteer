@@ -10,28 +10,85 @@
 
         <div class="alert alert-info"><strong>Warning:</strong>  These files maintain <span class="label label-info" id="diacritic_info" data-toggle="tooltip" title="A sign, such as an accent or cedilla, which when written above or below a letter indicates a difference in pronunciation from the same letter when unmarked or differently marked.">diacritics</span>.  Please be mindful not to use software like spreadsheets, which do not keep diacritics.</div> 
 
+        <b-form @submit="submit">
+            <b-form-group
+                    label="Gazetteer:"
+                    label-for="gazetteer">
+                <b-form-select
+                    id="gazetteer"
+                    v-model="form.gazetteer"
+                    :options="gazetteers"
+                />
+            </b-form-group>
+            <b-form-group
+                    label="Format:"
+                    label-for="format">
+                <b-form-select
+                    id="format"
+                    v-model="form.format"
+                    :options="formats"
+                />
+            </b-form-group>
+                <b-form-group
+                    label="Version:"
+                    label-for="version">
+                <b-form-select
+                    id="version"
+                    v-model="form.version"
+                    :options="versions"
+                />
+            </b-form-group>
+            <b-button type="submit" variant="primary"><b-icon-download/> Download </b-button>
+        </b-form>
     </b-container>
 </template>
 
 <script>
+import axios from 'axios'
 
 export default {
     name: "Search",
     data: function() {
-
+        return {
+            form: {
+                gazetteer: null,
+                format: 'CSV',
+                version: 'aadc:SCAR_CGA_PLACE_NAMES'
+            },
+            gazetteers: [{value: null, text: "Select a gazetteer"}],
+            formats: [
+                {value: 'CSV', text: "CSV"}, 
+                {value:'application%2Fjson', text:'GeoJSON'}, 
+                {value: 'application%2Fvnd.google-earth.kml%2Bxml', text: 'KML'}],
+            versions: [
+                {value:'aadc:SCAR_CGA_PLACE_NAMES', text: 'Full Version'},
+                {value: 'aadc:SCAR_CGA_PLACE_NAMES_SIMPLIFIED', text: 'Simplified Version'}
+            ]
+        }
     },
     methods: {
-        submit: function() {
-            let typeNameGeoServer = "aadc:SCAR_CGA_PLACE_NAMES"
-            typeNameGeoServer = "aadc:SCAR_CGA_PLACE_NAMES_SIMPLIFIED"
-            
-            let fileFormat = 'CSV'
-            fileFormat = 'application%2Fjson'
-            fileFormat = 'application%2Fvnd.google-earth.kml%2Bxml'
+        submit: function(event) {
+            event.preventDefault()
 
-            const downloadLink = `https://data.aad.gov.au/geoserver/aadc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=${typeNameGeoServer}&outputFormat=${fileFormat}`
-            this.$router.push(downloadLink)
+            let filter = ""
+
+            if(this.form.gazetteer) {
+                filter = `&CQL_FILTER=gazetteer='${this.form.gazetteer}'`
+            }
+
+            const downloadLink = `https://data.aad.gov.au/geoserver/aadc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=${this.form.version}&outputFormat=${this.form.format}${filter}`
+            window.location = downloadLink
         }
+    },
+    mounted: async function() {
+        let response = await axios.get('/api/gazetteers')
+        let gaz = response.data
+
+        let formatted = gaz.map(g => {
+            return {value: g.gazetteer_code, text: g.country}
+        })
+
+        this.gazetteers = this.gazetteers.concat(formatted)
     }
 }
 </script>
