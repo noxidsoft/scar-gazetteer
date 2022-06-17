@@ -21,13 +21,13 @@ services:
         - "traefik.enable=true"
         - "traefik.docker.network=aadc-traefik-net"
         - "traefik.default.protocol=http"
-        - "traefik.http.routers.${APP_NAME_DEPLOYMENT}_frontend.rule=Host(`${APP_HOST}`)"
-        - "traefik.http.services.${APP_NAME_DEPLOYMENT}_frontend.loadbalancer.server.port=80"
+        - "traefik.http.routers.${APP_NAME_DEPLOYMENT}_web.rule=Host(`${APP_HOST}`)"
+        - "traefik.http.services.${APP_NAME_DEPLOYMENT}_web.loadbalancer.server.port=80"
     logging:
       driver: loki
       options:
         loki-url: ${LOKI_URL}
-        loki-external-labels: "container_name=${APP_NAME_DEPLOYMENT}_frontend,environment=prod,containerID={{.ID}}"
+        loki-external-labels: "container_name=${APP_NAME_DEPLOYMENT}_web,environment=prod,containerID={{.ID}}"
     networks:
       - aadc-traefik-net
 
