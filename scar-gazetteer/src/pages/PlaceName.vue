@@ -1,7 +1,7 @@
 <template>
     <b-container>
         <h1>{{place.place_name_mapping}}</h1>
-        <b-badge>Place ID: {{place.place_id}}</b-badge><b-badge>Name ID: {{place.name_id}}</b-badge>
+        <b-badge>Name ID: {{place.name_id}}</b-badge><b-badge>Place ID: {{place.place_id}}</b-badge>
         <h3>Origin</h3>
         <p>This name originates from <strong>{{place.gazetteers.country}}</strong>. It is part of the {{gazetteerName}} and the SCAR Composite Gazetteer of Antarctica.</p>
         

@@ -1,3 +1,16 @@
+CREATE TABLE IF NOT EXISTS gazetteer.gazetteers
+(
+    gazetteer_id numeric(10,0) NOT NULL,
+    gazetteer_code character varying(100) COLLATE pg_catalog."default", 
+    gazetteer_name character varying(100) COLLATE pg_catalog."default",
+    national_authority character varying(100) COLLATE pg_catalog."default",
+    agency character varying(100) COLLATE pg_catalog."default",
+    names_urn character varying(100) COLLATE pg_catalog."default",
+    country character varying(100) COLLATE pg_catalog."default",
+    CONSTRAINT gazetteers_pkey PRIMARY KEY (gazetteer_id)
+    CONSTRAINT uk_code UNIQUE (gazetteer_code)
+);
+
 CREATE TABLE IF NOT EXISTS gazetteer.place_names
 (
     name_id numeric(10,0) NOT NULL,
@@ -51,18 +64,6 @@ CREATE TABLE IF NOT EXISTS gazetteer.glossary
     CONSTRAINT glossary_pkey PRIMARY KEY (glossary_id)
 );
 
-CREATE TABLE IF NOT EXISTS gazetteer.gazetteers
-(
-    gazetteer_id numeric(10,0) NOT NULL,
-    gazetteer_code character varying(100) COLLATE pg_catalog."default", 
-    gazetteer_name character varying(100) COLLATE pg_catalog."default",
-    national_authority character varying(100) COLLATE pg_catalog."default",
-    agency character varying(100) COLLATE pg_catalog."default",
-    names_urn character varying(100) COLLATE pg_catalog."default",
-    country character varying(100) COLLATE pg_catalog."default",
-    CONSTRAINT gazetteers_pkey PRIMARY KEY (gazetteer_id)
-);
-
 CREATE OR REPLACE VIEW gazetteer.name_count
  AS
  SELECT count(p.name_id) AS name_count,
@@ -89,6 +90,7 @@ GRANT USAGE on SCHEMA gazetteer to public_user, scar_admin;
 GRANT SELECT on gazetteer.place_names to public_user, scar_admin;
 GRANT SELECT on gazetteer.glossary to public_user, scar_admin;
 GRANT SELECT on gazetteer.gazetteers to public_user, scar_admin;
+GRANT SELECT on gazetteer.name_count to public_user, scar_admin;
 
 create or replace function gazetteer.authenticate()
     returns void
@@ -108,3 +110,15 @@ create or replace function gazetteer.authenticate()
         end;
     $$;
 
+create or replace function gazetteer.search()
+    language plpgsql
+    as $$
+        DECLARE
+            search_text text;
+        BEGIN
+            return select * from gazetteer.place_names
+            where place_name_mapping like '%'+search_text+'%'
+            OR place_id = search_text
+            OR name_id = search_text
+        end;
+    $$;

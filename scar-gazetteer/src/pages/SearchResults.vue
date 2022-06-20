@@ -13,8 +13,8 @@
             <template #cell(place_name_mapping)="p">
                 <div>
                     <a :href="`/place-name/${p.item.name_id}`">{{p.item.place_name_mapping}} ({{p.item.gazetteer}})</a>
-                    <b-badge>Place ID: {{p.item.place_id}}</b-badge>
                     <b-badge>Name ID: {{p.item.name_id}}</b-badge>
+                    <b-badge>Place ID: {{p.item.place_id}}</b-badge>
                 </div>
             </template>
         </b-table>
@@ -35,7 +35,9 @@ export default {
                 { key: 'latitude', sortable: false },
                 { key: 'longitude', sortable: false },
             ],
-            page_size: 25
+            page_size: 25,
+            results: [],
+            count: 0
         }
     },
     mixins: [pg],
@@ -45,30 +47,14 @@ export default {
         },
         total_pages() {
             return Math.ceil(this.count / this.page_size)
-        },
-        results() {
-            return this.pg
-        },
-        count() {
-            return this.pg.$range.totalCount
-        },
-        pgConfig() {
-
-            let filter = this.parseFilter()
-
-            return {
-                route: 'place_names',
-                query: {
-                    select: ['place_name_mapping', 'gazetteer', 'place_id', 'name_id', 'latitude', 'longitude', 'feature_type_code'],
-                    and: filter,
-                    order: [
-                        ['place_name_mapping', 'asc']
-                    ],
-                    limit: 50,
-                    offset: (this.page -1) * this.page_size
-                },
-                count: 'exact'
-            }
+        }
+    },
+    mounted: function() {
+        this.search()
+    },
+    watch: {
+        '$route': function() {
+            this.search()
         }
     },
     methods: {
@@ -76,26 +62,40 @@ export default {
             let filter = {}
 
             if(this.$route.query.search_text) {
-                filter['place_name_mapping.like'] = `%${this.$route.query.search_text}%`
+                filter['search_text'] = `${this.$route.query.search_text}`
+            } else {
+                filter['search_text'] = ''
             }
 
             if(this.$route.query.gazetteer) {
-                filter['gazetteer.eq'] = `${this.$route.query.gazetteer}`
+                filter['gazetteer'] = `eq.${this.$route.query.gazetteer}`
             }
 
             if(this.$route.query.feature_type) {
-                filter['feature_type_code.eq'] = `${this.$route.query.feature_type}`
+                filter['feature_type_code'] = `eq.${this.$route.query.feature_type}`
             }
 
             if(this.$route.query.relics == 1) {
-                filter['relic_flag.is'] = false
+                filter['relic_flag'] = `is.false`
             }
 
             if(this.$route.query.relics == 2) {
-                filter['relic_flag.is'] = true
+                filter['relic_flag'] = `is.true`
             }
 
+            filter['order'] = 'place_name_mapping.asc'
+
             return filter
+        },
+        search: async function() {
+            let filter = this.parseFilter()
+
+            filter['limit'] = this.page_size
+            filter['offset'] = (this.$route.query.page ?? 0) * this.page_size
+
+            const response = await axios.get(`/api/rpc/search?${qs.stringify(filter)}`, {headers:{'Prefer':'count=exact'}})
+            this.results = response.data
+            this.count = response.headers['content-range'].split('/')[1]
         },
         next: function () {
 
@@ -122,7 +122,7 @@ export default {
             let filter = this.parseFilter()
 
             axios({
-                url: `/api/place_names?${qs.stringify(filter).replace('=','*').replace('.','=').replace('*','.')}`,
+                url: `/api/rpc/search?${qs.stringify(filter)}`,
                 method: 'GET',
                 headers: {'Accept': 'text/csv'}
             }).then((response) => {
