@@ -1,9 +1,10 @@
 <template>
     <b-container>
         <h1>{{place.place_name_mapping}}</h1>
-        <b-badge>Name ID: {{place.name_id}}</b-badge><b-badge>Place ID: {{place.place_id}}</b-badge>
+        <b-badge>Name ID: {{place.name_id}}</b-badge> <b-badge>Place ID: {{place.place_id}}</b-badge>
+        <p v-if="place.feature_types">Feature Type: <a :href="'https://data.aad.gov.au/aadc/ftc/display_feature_type.cfm?feature_type_code='+ place.feature_types.feature_type_code">{{place.feature_types.feature_type_name}}</a> <b-icon-info-circle v-b-tooltip.hover :title="place.feature_types.definition"/></p>
         <h3>Origin</h3>
-        <p>This name originates from <strong>{{place.gazetteers.country}}</strong>. It is part of the {{gazetteerName}} and the SCAR Composite Gazetteer of Antarctica.</p>
+        <p v-if="place.gazetteers">This name originates from <strong>{{place.gazetteers.country}}</strong>. It is part of the {{gazetteerName}} and the SCAR Composite Gazetteer of Antarctica.</p>
         
         <div v-if="other_names.length > 0">
             <p>Names that other countries have for this feature: </p>
@@ -36,11 +37,11 @@
             </l-map>
         <h3>Source</h3>
         <ul>
-            <li>Location Method: </li>
-            <li>Source Name: </li>
-            <li>Source Publisher: </li>
-            <li>Source Scale:</li>
-            <li>Source Identifier: </li>
+            <li>Location Method: {{place.location_method || "Not Recorded"}}</li>
+            <li>Source Name: {{place.source_name || "Not Recorded"}}</li>
+            <li>Source Publisher: {{place.source_publisher || "Not Recorded"}}</li>
+            <li>Source Scale: {{place.source_scale || "Not Recorded"}}</li>
+            <li>Source Identifier: {{place.source_identifier || "Not Recorded"}}</li>
         </ul>
         <h3>Comments</h3>
         <p>{{place.comments}}</p>
@@ -77,7 +78,7 @@ export default {
             return {
                 route: 'place_names',
                 query: {
-                    select: ['*','gazetteers(*)'],
+                    select: ['*','gazetteers(*), feature_types(*)'],
                     and: {
                         'name_id.eq': this.$route.params.id
                     }

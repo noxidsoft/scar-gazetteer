@@ -12,9 +12,13 @@
         <b-table :items="results" :fields="fields" >
             <template #cell(place_name_mapping)="p">
                 <div>
-                    <a :href="`/place-name/${p.item.name_id}`">{{p.item.place_name_mapping}} ({{p.item.gazetteer}})</a>
-                    <b-badge>Name ID: {{p.item.name_id}}</b-badge>
-                    <b-badge>Place ID: {{p.item.place_id}}</b-badge>
+                    <a :href="`/place-name/${p.item.name_id}`">{{p.item.place_name_mapping}} ({{p.item.gazetteer}})</a><br />
+                    <b-badge>Name ID: {{p.item.name_id}}</b-badge> <b-badge>Place ID: {{p.item.place_id}}</b-badge>
+                </div>
+            </template>
+            <template #cell(feature_types)="f">
+                <div v-if="f.item.feature_types">
+                    <a :href="`https://data.aad.gov.au/aadc/ftc/display_feature_type.cfm?feature_type_code=${f.item.feature_types.feature_type_code}`">{{f.item.feature_types.feature_type_name}}</a>
                 </div>
             </template>
         </b-table>
@@ -34,6 +38,7 @@ export default {
                 { key: 'place_name_mapping', label: "Place Name", sortable: true },
                 { key: 'latitude', sortable: false },
                 { key: 'longitude', sortable: false },
+                { key: 'feature_types', label: "Feature Type", sortable: false}
             ],
             page_size: 25,
             results: [],
@@ -93,7 +98,7 @@ export default {
             filter['limit'] = this.page_size
             filter['offset'] = (this.$route.query.page ?? 0) * this.page_size
 
-            const response = await axios.get(`/api/rpc/search?${qs.stringify(filter)}`, {headers:{'Prefer':'count=exact'}})
+            const response = await axios.get(`/api/rpc/search?select=*,feature_types(feature_type_code,feature_type_name)&${qs.stringify(filter)}`, {headers:{'Prefer':'count=exact'}})
             this.results = response.data
             this.count = response.headers['content-range'].split('/')[1]
         },

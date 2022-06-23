@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS gazetteer.place_names
     feature_type_code numeric(10,0),
     narrative character varying(4000) COLLATE pg_catalog."default",
     named_for character varying(4000) COLLATE pg_catalog."default",
-    meeting_date character varying(200) COLLATE pg_catalog."default"
+    meeting_date character varying(200) COLLATE pg_catalog."default",
     meeting_paper character varying(200) COLLATE pg_catalog."default",
     date_revised date,
     gazetteer character varying(20) COLLATE pg_catalog."default",
@@ -62,6 +62,17 @@ CREATE TABLE IF NOT EXISTS gazetteer.glossary
     scar_feature_type character varying(100) COLLATE pg_catalog."default",
     feature_type_code character varying(100) COLLATE pg_catalog."default",
     CONSTRAINT glossary_pkey PRIMARY KEY (glossary_id)
+);
+
+CREATE TABLE IF NOT EXISTS gazetteer.feature_types
+(
+    feature_type_code numeric(10,0) NOT NULL,
+    feature_type_name character varying(100) COLLATE pg_catalog."default",
+    aliases character varying(100) COLLATE pg_catalog."default",
+    comments text,
+    definition text,
+    image_catalogue_nos character varying(100) COLLATE pg_catalog."default",
+    CONSTRAINT feature_type_pkey PRIMARY KEY (feature_type_code)
 );
 
 CREATE OR REPLACE VIEW gazetteer.name_count
@@ -110,15 +121,17 @@ create or replace function gazetteer.authenticate()
         end;
     $$;
 
-create or replace function gazetteer.search()
-    language plpgsql
-    as $$
-        DECLARE
-            search_text text;
+CREATE OR REPLACE FUNCTION gazetteer.search(
+	search_text text
+	)
+    RETURNS setof gazetteer.place_names
+    LANGUAGE plpgsql
+    AS $$
         BEGIN
-            return select * from gazetteer.place_names
-            where place_name_mapping like '%'+search_text+'%'
-            OR place_id = search_text
-            OR name_id = search_text
+			RETURN QUERY
+            select * from gazetteer.place_names
+            where LOWER(place_name_mapping) like '%' || LOWER(search_text) || '%'
+            OR place_id::text = search_text
+            OR name_id::text = search_text;
         end;
     $$;

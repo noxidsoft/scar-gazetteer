@@ -9,9 +9,8 @@
         </cfoutput>
     
         <p>The SCAR CGA is now a relational database - related to the
-            <a href="https://mapcatalogue.aq">SCAR Map catalogue</a>,
-            <a href="https://data.aad.gov.au/aadc/ftc/">SCAR Feature Catalogue</a> and the
-            <a href="https://data.aad.gov.au/aadc/biodiversity/">SCAR Flora and Fauna databases</a> (all developed by the Australian Antarctic Data Centre).
+            <a href="https://mapcatalogue.aq">SCAR Map catalogue</a>, and the
+            <a href="https://data.aad.gov.au/aadc/ftc/">SCAR Feature Catalogue</a>.
             This allows the search for Antarctic names, maps and flora and fauna information to be addressed via the gazetteer or map catalogue with results showing links to national names committees, map publishers, map retailers and small scale maps showing the distribution of flora and fauna.
         </p>
     

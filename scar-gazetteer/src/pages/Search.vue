@@ -88,6 +88,15 @@ export default {
         })
 
         this.gazetteers = this.gazetteers.concat(formatted)
+
+        let response2 = await axios.get('/api/feature_types')
+        let feat = response2.data
+
+        let formatted2 = feat.map(f => {
+            return {value: f.feature_type_code, text: f.feature_type_name}
+        })
+
+        this.feature_types = this.feature_types.concat(formatted2)
     }
 }
 </script>
