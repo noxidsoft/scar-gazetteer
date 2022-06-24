@@ -89,7 +89,9 @@ export default {
                     "latitude": this.place?.latitude,
                     "longitude": this.place?.longitude
                 },
-                "name": this.place?.place_name_mapping
+                "name": this.place?.place_name_mapping,
+                "description": this.place?.narrative,
+                "url": `${window.location}`
             }
         },
         place() {
