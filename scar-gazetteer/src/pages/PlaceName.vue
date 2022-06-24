@@ -55,6 +55,14 @@ import axios from 'axios'
 
 export default {
     name: 'PlaceName',
+    metaInfo: function () {
+        return {
+            script: [{
+                type: 'application/ld+json',
+                json: this.jsonld
+            }]
+        }
+    },
     components: {
         LMap,
         LMarker,
@@ -71,6 +79,19 @@ export default {
     },
     mixins: [pg],
     computed: {
+        jsonld() {
+
+            return {
+                '@context': 'http://schema.org',
+                "@type": "Place",
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": this.place?.latitude,
+                    "longitude": this.place?.longitude
+                },
+                "name": this.place?.place_name_mapping
+            }
+        },
         place() {
             return this.pg
         },

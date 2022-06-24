@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
+import VueMeta from 'vue-meta'
 import '@/assets/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'leaflet/dist/leaflet.css';
@@ -11,6 +12,7 @@ import router from './routes/main'
 
 Vue.config.productionTip = false
 
+Vue.use(VueMeta)
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
 
