@@ -27,27 +27,56 @@
           <!-- create navbar -->
           <b-navbar type="dark" variant="primary">
               <b-navbar-brand href="/">SCAR Gazetteer</b-navbar-brand>
-              <b-collapse id="nav-collapse" is-nav>
-                <b-navbar-nav>
-                  <b-nav-item to="/search"><b-icon-search /> Search</b-nav-item>
-                  <b-nav-item to="/information"><b-icon-info-circle-fill /> Information</b-nav-item>
-                </b-navbar-nav>
-              </b-collapse>
+              <b-navbar-nav>
+                <b-nav-item to="/search"><b-icon-search /> Search</b-nav-item>
+                <b-nav-item to="/information"><b-icon-info-circle-fill /> Information</b-nav-item>
+              </b-navbar-nav>
+
+              <b-navbar-nav class="nav-right">
+                <b-nav-form @submit="submit" v-if="!$store.state.user.isLoggedIn">
+                  <b-form-input size="sm" placeholder="Username" v-model="username"></b-form-input>
+                  <b-form-input size="sm" placeholder="Password" type="password" v-model="password"></b-form-input>
+                  <b-button size ="sm" type="submit">Login</b-button>
+                </b-nav-form>
+                <b-nav-item v-else>
+                  <b-nav-item>{{$store.state.user.username}}</b-nav-item>
+                  <b-button size="sm" @click="logout">Logout</b-button>
+                </b-nav-item>
+              </b-navbar-nav>
           </b-navbar>
         </b-container>
       </div>
     </div>
     <router-view />
-
   </b-container>
 </template>
 
 <script>
-
+import { mapActions } from 'vuex'
 
 export default {
   name: 'App',
   components: {
+  },
+  data: function() {
+    return {
+      username: '',
+      password: ''
+    }
+  },
+  methods: {
+    ...mapActions('user', [
+      'authenticate',
+      'checkLoggedIn',
+      'logout'
+    ]),
+    submit: function(event) {
+      event.preventDefault()
+      this.authenticate({username: this.username, password: this.password})
+    }
+  },
+  mounted: function() {
+    this.checkLoggedIn()
   }
 }
 </script>
@@ -62,5 +91,21 @@ export default {
 
 .navbar-brand {
   padding-left: 1.5em
+}
+
+.nav-right {
+    justify-content: flex-end;
+    flex-grow: 3; 
+    padding-right: 1.5em;
+}
+
+.form-inline {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.form-control {
+  margin: 0.5em;
 }
 </style>

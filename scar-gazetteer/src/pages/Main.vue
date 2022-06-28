@@ -2,11 +2,11 @@
         <div class="container">
         <h1>Welcome to the SCAR Composite Gazetteer of Antarctica</h1>
     
-        <cfoutput>
-            <p>The SCAR Composite Gazetteer of Antarctica (CGA) has been compiled over a period of {{years}} years (commenced 1992) and consists of {{name_count}} names that correspond to {{feature_count}} features.
-                The place names information has been submitted by the national names committees from 22 countries and compiled by Roberto Cervellati and Chiara Ramorino from the Italian Antarctic names committee - Comitato per i nomi geografici antartici.
-            </p>
-        </cfoutput>
+
+        <p>The SCAR Composite Gazetteer of Antarctica (CGA) has been compiled over a period of {{years}} years (commenced 1992) and consists of {{name_count}} names that correspond to {{feature_count}} features.
+            The place names information has been submitted by the national names committees from 22 countries and compiled by Roberto Cervellati and Chiara Ramorino from the Italian Antarctic names committee - Comitato per i nomi geografici antartici.
+        </p>
+
     
         <p>The SCAR CGA is now a relational database - related to the
             <a href="https://mapcatalogue.aq">SCAR Map catalogue</a>, and the
@@ -15,10 +15,10 @@
         </p>
     
         <ul class="unstyled">
-            <li><a href="/search"><b-icon-search /> Search for names</a></li>
-            <li><a href="/information/statistics"><b-icon-bar-chart/> View SCAR Gazetteer summary information</a></li>
-            <li><a href="/download"><b-icon-download-alt /> Download SCAR Gazetteer</a></li>
-            <li><a href="/information/batch-instructions"><b-icon-question-sign /> Instructions for batch edits</a></li>
+            <li><b-icon-search /> <a href="/search">Search for names</a></li>
+            <li><b-icon-bar-chart/> <a href="/information/statistics"> View SCAR Gazetteer summary information</a></li>
+            <li><b-icon-cloud-arrow-down /> <a href="/download"> Download SCAR Gazetteer</a></li>
+            <li><b-icon-info-circle /> <a href="/information/batch-instructions"> Instructions for batch edits</a></li>
         </ul>
     </div>
 </template>
@@ -41,3 +41,14 @@ export default {
     }
 }
 </script>
+
+
+<style scoped>
+
+.unstyled {
+  list-style: none; /* Remove list bullets */
+  padding: 0;
+  margin: 0;
+}
+
+</style>

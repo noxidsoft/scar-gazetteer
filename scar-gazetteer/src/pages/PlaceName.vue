@@ -80,7 +80,6 @@ export default {
     mixins: [pg],
     computed: {
         jsonld() {
-
             return {
                 '@context': 'http://schema.org',
                 "@type": "Place",

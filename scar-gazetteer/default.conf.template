@@ -11,4 +11,8 @@ server {
     try_files $uri $uri/ /index.html;
     gzip_static on;
   }
+
+  location /user/api {
+    proxy_pass https://data.aad.gov.au/user/api;
+  }
 }

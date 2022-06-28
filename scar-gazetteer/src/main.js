@@ -6,7 +6,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'leaflet/dist/leaflet.css';
 import { Icon } from 'leaflet';
 
-
+import store from './store';
 import App from './App.vue'
 import router from './routes/main'
 
@@ -26,5 +26,6 @@ Icon.Default.mergeOptions({
 
 new Vue({
   router,
+  store,
   render: h => h(App),
 }).$mount('#app')
