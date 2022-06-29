@@ -18,6 +18,10 @@ import InformationCitation from "@/pages/InformationCitation.vue"
 import InformationGlossary from "@/pages/InformationGlossary.vue"
 import InformationNamingAuthorities from "@/pages/InformationNamingAuthorities.vue"
 import InformationStatistics from "@/pages/InformationStatistics.vue"
+import NewPlaceName from "@/pages/NewPlaceName.vue"
+import EditPlaceName from "@/pages/EditPlaceName.vue"
+
+import store from "@/store"
 
 Vue.use(Router)
 Vue.use(Postgrest,
@@ -96,8 +100,30 @@ const router = new Router({
         {
             path: '/place-name/:id',
             component: PlaceName
+        },
+        {
+            path: '/place-name/:id/edit',
+            component: EditPlaceName,
+            meta: {requiresAdmin: true}
+        },
+        {
+            path: '/new-name',
+            component: NewPlaceName,
+            meta: {requiresAdmin: true}
         }
     ]
 })
+
+router.beforeEach((to, from, next) => {
+    if(to.matched.some(record => record.meta.requiresAdmin)) {
+      if (store.state.user.isAdmin) {
+        next()
+        return
+      }
+      next('/')
+    } else {
+      next()
+    }
+  })
 
 export default router

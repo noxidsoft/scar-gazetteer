@@ -30,6 +30,7 @@
               <b-navbar-nav>
                 <b-nav-item to="/search"><b-icon-search /> Search</b-nav-item>
                 <b-nav-item to="/information"><b-icon-info-circle-fill /> Information</b-nav-item>
+                <b-nav-item v-if="$store.state.user.isAdmin" to="/new-name"><b-icon-plus-circle-fill /> Add new name</b-nav-item>
               </b-navbar-nav>
 
               <b-navbar-nav class="nav-right">
@@ -38,10 +39,10 @@
                   <b-form-input size="sm" placeholder="Password" type="password" v-model="password"></b-form-input>
                   <b-button size ="sm" type="submit">Login</b-button>
                 </b-nav-form>
-                <b-nav-item v-else>
-                  <b-nav-item>{{$store.state.user.username}}</b-nav-item>
-                  <b-button size="sm" @click="logout">Logout</b-button>
-                </b-nav-item>
+                <div v-else class="form-inline">
+                    <b-nav-item>{{$store.state.user.username}}</b-nav-item>
+                    <b-button size="sm" @click="logout">Logout</b-button>
+                </div>
               </b-navbar-nav>
           </b-navbar>
         </b-container>
@@ -53,6 +54,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { setDefaultToken } from 'vue-postgrest'
 
 export default {
   name: 'App',
@@ -77,6 +79,7 @@ export default {
   },
   mounted: function() {
     this.checkLoggedIn()
+    setDefaultToken(this.$store.getters['user/getToken'])
   }
 }
 </script>

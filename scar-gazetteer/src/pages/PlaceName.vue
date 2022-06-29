@@ -1,6 +1,6 @@
 <template>
     <b-container>
-        <h1>{{place.place_name_mapping}}</h1>
+        <h1>{{place.place_name_mapping}} <b-button :to="`/place-name/${place.name_id}/edit`" v-if="$store.state.user.isAdmin">Edit</b-button></h1>
         <b-badge>Name ID: {{place.name_id}}</b-badge> <b-badge>Place ID: {{place.place_id}}</b-badge>
         <p v-if="place.feature_types">Feature Type: <a :href="'https://data.aad.gov.au/aadc/ftc/display_feature_type.cfm?feature_type_code='+ place.feature_types.feature_type_code">{{place.feature_types.feature_type_name}}</a> <b-icon-info-circle v-b-tooltip.hover :title="place.feature_types.definition"/></p>
         <h3>Origin</h3>
@@ -37,7 +37,7 @@
             </l-map>
         <h3>Source</h3>
         <ul>
-            <li>Location Method: {{place.location_method || "Not Recorded"}}</li>
+            <li>Location Method: {{place.location_method_id || "Not Recorded"}}</li>
             <li>Source Name: {{place.source_name || "Not Recorded"}}</li>
             <li>Source Publisher: {{place.source_publisher || "Not Recorded"}}</li>
             <li>Source Scale: {{place.source_scale || "Not Recorded"}}</li>

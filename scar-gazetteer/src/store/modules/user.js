@@ -4,6 +4,12 @@ import decode from 'jwt-decode'
 
 const JWT_TOKEN = 'scar_token'
 
+const ADMIN_ROLES = [
+    'AADC',
+    'AADC_DEV',
+    'GAZ_EDIT'
+]
+
 function getToken() {
     return Cookie.get(JWT_TOKEN)
 }
@@ -29,11 +35,17 @@ export default {
         isAdmin: false,
         token: ''
     },
+    getters: {
+        getToken: (state) => {
+            return state.token
+        }
+    },
     mutations: {
         login: (state, userInfo) => {
             state.isLoggedIn = true
             state.username = userInfo.username
             state.token = userInfo.token
+            state.isAdmin = userInfo.isAdmin
         },
         logout: state => {
             state.isLoggedIn = false
@@ -55,6 +67,7 @@ export default {
         },
         checkLoggedIn({commit}) {
             const token = getToken()
+            let isAdmin = false;
 
             if(token) {
                 if(isTokenExpired(token)) {
@@ -65,9 +78,14 @@ export default {
 
                 const tokenDecoded = decode(token)
 
+                if(ADMIN_ROLES.some(r => tokenDecoded.roles.includes(r))) {
+                    isAdmin = true
+                }
+
                 commit('login', {
                     username: tokenDecoded.user.username,
-                    token: token
+                    token: token,
+                    isAdmin: isAdmin
                 })
 
             } else {
@@ -77,6 +95,7 @@ export default {
         logout({dispatch}){
             Cookie.remove(JWT_TOKEN)
             dispatch('checkLoggedIn')
+            window.location = '/'
         }
     }
 }
