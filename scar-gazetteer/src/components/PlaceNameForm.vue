@@ -1,14 +1,25 @@
 <template>
-            <b-form @submit="submit">
+    <b-form @submit="submit">
             <b-form-group
-            label="Official Name:"
-            label-for="official_name"
+            label="Mapping Place Name:"
+            label-for="place_name_mapping"
             >
                 <b-form-input
-                id="official_name-1"
-                v-model="form_data.place_name_mapping"
+                id="place_name_mapping"
+                v-model="$v.form_data.place_name_mapping.$model"
                 type="text"
-                required
+                :state="validateState('place_name_mapping')"
+                />
+            </b-form-group>
+            <b-form-group
+            label="Gazetteer Place Name:"
+            label-for="place_name_gazetteer"
+            >
+                <b-form-input
+                id="place_name_mapping"
+                v-model="$v.form_data.place_name_gazetteer.$model"
+                :state="validateState('place_name_gazetteer')"
+                type="text"
                 />
             </b-form-group>
 
@@ -18,9 +29,9 @@
             >
                 <b-form-input
                 id="latitude"
-                v-model="form_data.latitude"
+                v-model="$v.form_data.latitude.$model"
                 type="text"
-                required
+                :state="validateState('latitude')"
                 />
             </b-form-group>
             <b-form-group
@@ -29,9 +40,9 @@
             >
                 <b-form-input
                 id="longitude"
-                v-model="form_data.longitude"
+                v-model="$v.form_data.longitude.$model"
                 type="text"
-                required
+                :state="validateState('longitude')"
                 />
             </b-form-group>
             <b-form-group
@@ -40,8 +51,9 @@
             >
                 <b-form-input
                 id="coordinate_accuracy"
-                v-model="form_data.coordinate_accuracy"
+                v-model="$v.form_data.coordinate_accuracy.$model"
                 type="text"
+                :state="validateState('coordinate_accuracy')"
                 />
             </b-form-group>
             <b-form-group
@@ -50,8 +62,9 @@
             >
                 <b-form-input
                 id="altitude"
-                v-model="form_data.altitude"
+                v-model="$v.form_data.altitude.$model"
                 type="text"
+                :state="validateState('altitude')"
                 />
             </b-form-group>
             <b-form-group
@@ -60,8 +73,9 @@
             >
                 <b-form-input
                 id="altitude"
-                v-model="form_data.altitude_accuracy"
+                v-model="$v.form_data.altitude_accuracy.$model"
                 type="text"
+                :state="validateState('altitude_accuracy')"
                 />
             </b-form-group>
             <b-form-group
@@ -70,7 +84,7 @@
                 >
                 <b-form-textarea
                 id="narrative"
-                v-model="form_data.narrative"
+                v-model="$v.form_data.narrative.$model"
                 rows="3"
                 max-rows="6"
                 />
@@ -81,7 +95,7 @@
                 >
                 <b-form-textarea
                 id="named-for"
-                v-model="form_data.named_for"
+                v-model="$v.form_data.named_for.$model"
                 rows="3"
                 max-rows="6"
                 />
@@ -91,8 +105,9 @@
                     label-for="gazetteer">
                 <b-form-select
                     id="gazetteer"
-                    v-model="form_data.gazetteer"
+                    v-model="$v.form_data.gazetteer.$model"
                     :options="lists.gazetteers"
+                    :state="validateState('gazetteer')"
                 />
             </b-form-group>
             <b-form-group
@@ -100,8 +115,9 @@
                     label-for="feature_type">
                 <b-form-select
                     id="feature_type"
-                    v-model="form_data.feature_type_code"
+                    v-model="$v.form_data.feature_type_code.$model"
                     :options="lists.feature_types"
+                    :state="validateState('feature_type_code')"
                 />
             </b-form-group>
             <b-form-group
@@ -110,7 +126,7 @@
             >
                 <b-form-input
                 id="feature_class"
-                v-model="form_data.scar_feature_class"
+                v-model="$v.form_data.scar_feature_class.$model"
                 type="text"
                 />
             </b-form-group>
@@ -119,7 +135,7 @@
                     label-for="is_relic">
                 <b-form-select
                     id="is_relic"
-                    v-model="form_data.relic_flag"
+                    v-model="$v.form_data.relic_flag.$model"
                     :options="lists.relic"
                 />
             </b-form-group>
@@ -128,7 +144,7 @@
                     label-for="date_named">
                 <b-form-input
                 id="date_named"
-                v-model="form_data.date_named"
+                v-model="$v.form_data.date_named.$model"
                 type="date"
                 />
             </b-form-group>
@@ -138,9 +154,49 @@
                 >
                 <b-form-textarea
                 id="comments"
-                v-model="form_data.comments"
+                v-model="$v.form_data.comments.$model"
                 rows="3"
                 max-rows="6"
+                />
+            </b-form-group>
+            <b-form-group
+            label="Source Name:"
+            label-for="source_name"
+            >
+                <b-form-input
+                id="source_name"
+                v-model="$v.form_data.source_name.$model"
+                type="text"
+                />
+            </b-form-group>
+            <b-form-group
+            label="Source Publisher:"
+            label-for="source_publisher"
+            >
+                <b-form-input
+                id="source_publisher"
+                v-model="$v.form_data.source_publisher.$model"
+                type="text"
+                />
+            </b-form-group>
+            <b-form-group
+            label="Source Identifier:"
+            label-for="source_identifier"
+            >
+                <b-form-input
+                id="source_identifier"
+                v-model="$v.form_data.source_identifier.$model"
+                type="text"
+                />
+            </b-form-group>
+            <b-form-group
+            label="Source Scale:"
+            label-for="source_scale"
+            >
+                <b-form-input
+                id="source_scale"
+                v-model="$v.form_data.source_scale.$model"
+                type="text"
                 />
             </b-form-group>
             <br />
@@ -151,15 +207,24 @@
 
 <script>
 import axios from 'axios'
+import { validationMixin } from "vuelidate"
+import { required, minLength, between, decimal } from 'vuelidate/lib/validators'
+
 
 export default {
     name: 'PlaceNameForm',
     props: {
         form: Object
     },
+    mixins: [validationMixin],
     data: function() {
         return {
-            form_data: {},
+            form_data: {
+                place_name_mapping: null,
+                place_name_gazetteer: null,
+                latitude: null,
+                longitude: null,
+            },
             lists: {
                 gazetteers: [{value: null, text: 'Select Gazetteer'}],
                 feature_types: [{value: null, text: 'Select Feature Type'}],
@@ -167,6 +232,73 @@ export default {
                 location_method: [
                     {value: null, text: 'None'}
                 ]
+            }
+        }
+    },
+    validations: {
+        form_data: {
+            place_name_mapping: {
+                required,
+                minLength: minLength(5)
+            },
+            place_name_gazetteer: {
+                required,
+                minLength: minLength(5)
+            },
+            latitude: {
+                required,
+                decimal,
+                between: between(-90,-60)
+            },
+            longitude: {
+                required,
+                decimal,
+                between: between(-180,180)
+            },
+            coordinate_accuracy: {
+                decimal
+            },
+            altitude: {
+                decimal
+            },
+            altitude_accuracy: {
+
+            },
+            narrative: {
+
+            },
+            named_for: {
+
+            },
+            gazetteer: {
+                required
+            },
+            feature_type_code: {
+                required
+            },
+            scar_feature_class: {
+
+            },
+            relic_flag: {
+                required
+            },
+            date_named: {
+
+            },
+            comments: {
+
+            },
+            source_name: {
+
+            },
+            source_publisher: {
+
+            },
+            source_identifier: {
+
+            },
+            source_scale: {
+
             }
         }
     },
@@ -197,8 +329,19 @@ export default {
         this.lists.feature_types = this.lists.feature_types.concat(formatted2)
     },
     methods: {
+        validateState(name) {
+            const { $dirty, $error } = this.$v.form_data[name];
+
+            return $dirty? !$error : null
+        },
         submit (event) {
             event.preventDefault()
+
+            this.$v.form.$touch();
+            if (this.$v.form.$anyError) {
+                return;
+            }
+
             this.$emit('submit', this.form_data)
         },
         reset () {

@@ -1,4 +1,8 @@
-# scar-gazetter
+# SCAR Composite Gazetteer of Antarctica
+
+Vue.js Web Application for the[SCAR Composite Gazetteer of Antarctica](placenames.aq)
+
+This web app is created with Vue.js, Postgrest, and Postgresql
 
 ## Project setup
 ```
@@ -14,11 +18,3 @@ npm run serve
 ```
 npm run build
 ```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

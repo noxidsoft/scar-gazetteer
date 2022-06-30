@@ -1,5 +1,5 @@
 <template>
-    <b-container>
+    <b-container class="place">
         <h1>{{place.place_name_mapping}} <b-button :to="`/place-name/${place.name_id}/edit`" v-if="$store.state.user.isAdmin">Edit</b-button></h1>
         <b-badge>Name ID: {{place.name_id}}</b-badge> <b-badge>Place ID: {{place.place_id}}</b-badge>
         <p v-if="place.feature_types">Feature Type: <a :href="'https://data.aad.gov.au/aadc/ftc/display_feature_type.cfm?feature_type_code='+ place.feature_types.feature_type_code">{{place.feature_types.feature_type_name}}</a> <b-icon-info-circle v-b-tooltip.hover :title="place.feature_types.definition"/></p>
@@ -140,5 +140,9 @@ export default {
         color: #fff;
         background-color: #999;
         text-shadow: 0 -1px 0 rgb(0 0 0 / 25%);
+    }
+
+    .place {
+        max-width: 60em;
     }
 </style>

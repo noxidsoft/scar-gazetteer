@@ -1,5 +1,5 @@
 <template>
-        <div class="container">
+    <b-container class="main-content">
         <h1>Welcome to the SCAR Composite Gazetteer of Antarctica</h1>
     
 
@@ -20,7 +20,7 @@
             <li><b-icon-cloud-arrow-down /> <a href="/download"> Download SCAR Gazetteer</a></li>
             <li><b-icon-info-circle /> <a href="/information/batch-instructions"> Instructions for batch edits</a></li>
         </ul>
-    </div>
+    </b-container>
 </template>
 
 <script>
@@ -49,6 +49,10 @@ export default {
   list-style: none; /* Remove list bullets */
   padding: 0;
   margin: 0;
+}
+
+.main-content {
+    max-width: 60em;
 }
 
 </style>

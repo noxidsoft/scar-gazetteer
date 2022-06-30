@@ -1,5 +1,5 @@
 <template>
-    <b-container>
+    <b-container class="search">
         <h1>Search for place names</h1>
         <b-form @submit="search">
             <b-form-group
@@ -100,3 +100,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.search {
+    max-width: 50em;
+}
+</style>

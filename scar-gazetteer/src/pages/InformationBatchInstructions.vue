@@ -6,8 +6,8 @@
         <p>
             To prepare a file for batch <strong>updates</strong> of existing place names: 
                 <ol>
-                    <li>Go to the <a href="http://data.aad.gov.au/aadc/gaz/scar/search.cfm">SCAR Composite Gazettteer of Antarctica search page</a> and perform a search that will retrieve the relevant records.</li>
-                    <li>On the search results page, click the button titled "Download as" (blue button at top right), and choose 'CSV'.</li>
+                    <li>Go to the <a href="/search">SCAR Composite Gazettteer of Antarctica search page</a> and perform a search that will retrieve the relevant records.</li>
+                    <li>On the search results page, click the button titled "Download" (blue button at top right).</li>
                     
                     <li>Open up the saved .csv file and perform edits.</li>
                     <li>Remove rows that have not been updated.</li>
@@ -17,7 +17,7 @@
         <p>
             To prepare a file for batch <strong>additions</strong> of place names: 
                 <ol>
-                    <li>Open this <a href="/aadc/gaz/scar/new_place_names_template.csv">.csv file template</a>.</li>
+                    <li>Open this <a href="/static/new_place_names_template.csv">.csv file template</a>.</li>
                     <li>Insert new rows for each new place name with values corresponding to the headers in the first row</li> 
                     <li>Email the .csv file to <a href="mailto:scar.cga@unisi.it">scar.cga@unisi.it</a>.  Please include your name, organisation and contact details. The Italian SCAGI member, who maintains the content of the gazetteer, will review and update accordingly.</li>
                 </ol> 

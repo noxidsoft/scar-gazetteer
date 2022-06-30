@@ -1,5 +1,5 @@
 <template>
-    <b-container>
+    <b-container class="search">
         <h1>Search Results</h1>
         <b-alert show>
             <p><b-icon-info-circle-fill /> <strong>SCAR Gazetteer Information:</strong>
@@ -7,8 +7,15 @@
             SCAR uses a more general feature type coding, so each place will, in general, have multiple feature types.</p>
 		</b-alert>
         <p>Page: {{ page }} of {{ total_pages }} - Total Results: {{count}}</p>
-        <b-button @click="previous" :disabled="page == 1">Previous</b-button> <b-button @click="next" :disabled="page >= total_pages">Next</b-button> 
-        <b-button @click="download"><b-icon-download /> Download</b-button>
+        <div class="control">
+            <div class="page-control">
+                <b-button @click="previous" :disabled="page == 1">Previous</b-button>
+                <b-button @click="next" :disabled="page >= total_pages">Next</b-button> 
+            </div>
+            <div class="download-control">
+                <b-button @click="download" variant="outline-primary"><b-icon-download /> Download</b-button>
+            </div>
+        </div>
         <b-table :items="results" :fields="fields" >
             <template #cell(place_name_mapping)="p">
                 <div>
@@ -150,4 +157,22 @@ export default {
         background-color: #999;
         text-shadow: 0 -1px 0 rgb(0 0 0 / 25%);
     }
+
+    .search {
+        max-width: 50em;
+    }
+
+    .control {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        gap: 1.5em;
+    }
+
+    .page-control {
+        display: flex;
+        gap: 1em;
+        flex-grow: 1;
+    }
+
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <b-container>
+    <b-container class="infomation-content">
         <b-row>
             <b-col cols="3">
                 <b-nav pills vertical>
@@ -21,3 +21,9 @@
         </b-row>
     </b-container>
 </template>
+
+<style scoped>
+.infomation-content {
+    max-width: 70em;
+}
+</style>
