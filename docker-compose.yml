@@ -13,5 +13,4 @@ services:
         - PGRST_JWT_SECRET=${JWT_SECRET}
         - PGRST_LOG_LEVEL=info
         - PGRST_PRE_REQUEST=gazetteer.authenticate
-      ports:
-       - 3000:3000
+
