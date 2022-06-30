@@ -1,9 +1,9 @@
 version: '3.7'
 
 services:
-    #web:
-    #  image: scar/scar-gazetteer:latest
-    #  build: ./scar-gazetteer
+    web:
+      image: scar/scar-gazetteer:latest
+      build: ./scar-gazetteer
     api:
       image: postgrest/postgrest:latest
       environment:
