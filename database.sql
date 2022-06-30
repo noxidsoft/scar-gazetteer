@@ -1,3 +1,5 @@
+ CREATE EXTENSION unaccent;
+
 CREATE TABLE IF NOT EXISTS gazetteer.gazetteers
 (
     gazetteer_id numeric(10,0) NOT NULL,
@@ -161,7 +163,7 @@ CREATE OR REPLACE FUNCTION gazetteer.search(
         BEGIN
 			RETURN QUERY
             select * from gazetteer.place_names
-            where LOWER(place_name_mapping) like '%' || LOWER(search_text) || '%'
+            where LOWER(unaccent(place_name_mapping)) like '%' || LOWER(unaccent(search_text)) || '%'
             OR place_id::text = search_text
             OR name_id::text = search_text;
         end;

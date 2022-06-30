@@ -38,6 +38,37 @@ export default {
         years: function() {
             return dayjs().year() - 1992
         }
+    },
+    metaInfo: function () {
+        return {
+            script: [{
+                type: 'application/ld+json',
+                json: {
+                    "@context": "https://schema.org",
+                    "@type": "WebPage",
+                    "name": 'SCAR Composite Gazetteer of Antarctica',
+                    "sourceOrganization" : {
+                        "@type": "Organization",
+                        "name": "Scientific Committee on Antarctic Research (SCAR)",
+                        "url": "https://scar.org",
+                        "logo": "https://scar.org/templates/it_headlines/custom/images/SCAR_logo_2018_white_background.png"
+                    },
+                    "publisher": {
+                        "@type": "Organization",
+                        "name": "Scientific Committee on Antarctic Research (SCAR)",
+                        "url": "https://scar.org",
+                        "logo": "https://scar.org/templates/it_headlines/custom/images/SCAR_logo_2018_white_background.png"
+                    },
+                    "spatialCoverage": {
+                        "@type": "Place",
+                        "geo": {
+                            "@type": "GeoShape",
+                            "box": "-90 180 -60 -180"
+                        }
+                    }
+                }
+            }]
+        }
     }
 }
 </script>

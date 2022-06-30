@@ -63,6 +63,18 @@ export default {
   name: 'App',
   components: {
   },
+  metaInfo: function () {
+    return {
+      title: 'SCAR Composite Gazetteer of Antarctica',
+      meta: [
+        { name: 'description', content: 'SCAR Composite Gazetteer of Antarctica' },
+        { property: 'og:title', content: 'SCAR Composite Gazetteer of Antarctica' },
+        { property: 'og:site_name', content: 'SCAR Composite Gazetteer of Antarctica' },
+        { property: 'og:type', content: 'website' },
+        { name: 'robots', content: 'index,follow' },
+      ]
+    }
+  },
   data: function() {
     return {
       username: '',
