@@ -3,6 +3,7 @@ FROM node:14-alpine as builder
 
 WORKDIR /tmp/app
 COPY ./ .
+RUN npm cache clean --force
 RUN npm install && npm run build
 
 # Step 2
