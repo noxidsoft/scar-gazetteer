@@ -7,7 +7,7 @@
             SCAR uses a more general feature type coding, so each place will, in general, have multiple feature types.</p>
 		</b-alert>
         <p>Page: {{ page }} of {{ total_pages }} - Total Results: {{count}}</p>
-        <b-button @click="previous" :disabled="page == 1">Previous</b-button> <b-button @click="next" :disabled="page >= total_pages">Next</b-button>
+        <b-button @click="previous" :disabled="page == 1">Previous</b-button> <b-button @click="next" :disabled="page >= total_pages">Next</b-button> 
         <b-button @click="download"><b-icon-download /> Download</b-button>
         <b-table :items="results" :fields="fields" >
             <template #cell(place_name_mapping)="p">

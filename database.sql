@@ -11,6 +11,17 @@ CREATE TABLE IF NOT EXISTS gazetteer.gazetteers
     CONSTRAINT uk_code UNIQUE (gazetteer_code)
 );
 
+CREATE TABLE IF NOT EXISTS gazetteer.feature_types
+(
+    feature_type_code numeric(10,0) NOT NULL,
+    feature_type_name character varying(100) COLLATE pg_catalog."default",
+    aliases character varying(100) COLLATE pg_catalog."default",
+    comments text,
+    definition text,
+    image_catalogue_nos character varying(100) COLLATE pg_catalog."default",
+    CONSTRAINT feature_type_pkey PRIMARY KEY (feature_type_code)
+);
+
 CREATE TABLE IF NOT EXISTS gazetteer.place_names
 (
     name_id numeric(10,0) NOT NULL,
@@ -49,8 +60,33 @@ CREATE TABLE IF NOT EXISTS gazetteer.place_names
         REFERENCES gazetteer.gazetteers (gazetteer_code) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT feature_fk FOREIGN KEY (feature_type_code)
+        REFERENCES gazetteer.feature_types (feature_type_code) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
         NOT VALID
 );
+
+CREATE OR REPLACE FUNCTION set_place_geom()
+RETURNS trigger AS
+$$
+BEGIN
+    UPDATE place_names
+    SET geom = ST_SetSRID(ST_MakePoint(NEW.latitude, NEW.longitude), 4326)
+    from place_names p
+    where new.name_id = p.name_id;
+
+    RETURN NULL;
+
+END
+$$  LANGUAGE plpgsql;
+
+CREATE TRIGGER set_place_geom_trigger
+AFTER INSERT OR UPDATE ON place_names
+FOR EACH ROW
+WHEN (pg_trigger_depth() < 1)
+EXECUTE PROCEDURE set_place_geom();
 
 CREATE TABLE IF NOT EXISTS gazetteer.glossary
 (
@@ -62,17 +98,6 @@ CREATE TABLE IF NOT EXISTS gazetteer.glossary
     scar_feature_type character varying(100) COLLATE pg_catalog."default",
     feature_type_code character varying(100) COLLATE pg_catalog."default",
     CONSTRAINT glossary_pkey PRIMARY KEY (glossary_id)
-);
-
-CREATE TABLE IF NOT EXISTS gazetteer.feature_types
-(
-    feature_type_code numeric(10,0) NOT NULL,
-    feature_type_name character varying(100) COLLATE pg_catalog."default",
-    aliases character varying(100) COLLATE pg_catalog."default",
-    comments text,
-    definition text,
-    image_catalogue_nos character varying(100) COLLATE pg_catalog."default",
-    CONSTRAINT feature_type_pkey PRIMARY KEY (feature_type_code)
 );
 
 CREATE OR REPLACE VIEW gazetteer.name_count
@@ -92,9 +117,12 @@ ALTER TABLE gazetteer.glossary ENABLE ROW LEVEL SECURITY;
 ALTER TABLE gazetteer.gazetteers ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY public_view ON gazetteer.place_names FOR SELECT TO public_user USING (view_by_public_flag=true);
-CREATE POLICY full_view ON gazetteer.place_names FOR SELECT TO public_user USING (true);
-CREATE POLICY public_view ON gazetteer.glossary FOR SELECT TO public_user USING (true);
-CREATE POLICY public_view ON gazetteer.gazetteers FOR SELECT TO public_user USING (true);
+CREATE POLICY full_view ON gazetteer.place_names FOR SELECT TO scar_admin USING (true);
+CREATE POLICY public_view ON gazetteer.glossary FOR SELECT TO public_user, scar_admin USING (true);
+CREATE POLICY public_view ON gazetteer.gazetteers FOR SELECT TO public_user, scar_admin USING (true);
+CREATE POLICY public_view ON gazetteer.feature_types FOR SELECT TO public_user, scar_admin USING (true);
+
+CREATE POLICY full_edit ON gazetteer.place_names FOR UPDATE TO scar_admin USING (true);
 
 GRANT USAGE on SCHEMA gazetteer to public_user, scar_admin;
 
@@ -102,6 +130,9 @@ GRANT SELECT on gazetteer.place_names to public_user, scar_admin;
 GRANT SELECT on gazetteer.glossary to public_user, scar_admin;
 GRANT SELECT on gazetteer.gazetteers to public_user, scar_admin;
 GRANT SELECT on gazetteer.name_count to public_user, scar_admin;
+GRANT SELECT on gazetteer.feature_types to public_user, scar_admin;
+
+GRANT INSERT, UPDATE on gazetteer.place_names to scar_admin;
 
 create or replace function gazetteer.authenticate()
     returns void

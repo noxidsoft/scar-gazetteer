@@ -1,27 +1,29 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Postgrest from 'vue-postgrest'
+import axios from 'axios'
+import https from 'https'
 
-import Main from "@/pages/Main.vue"
-import Search from "@/pages/Search.vue"
-import SearchResults from "@/pages/SearchResults.vue"
-import Download from "@/pages/Download.vue"
-import PlaceName from "@/pages/PlaceName.vue"
-import Information from "@/pages/Information.vue"
-import InformationGeneral from "@/pages/InformationGeneral.vue"
-import InformationBatchInstructions from "@/pages/InformationBatchInstructions.vue"
-import InformationHistory from "@/pages/InformationHistory.vue"
-import InformationThemes from "@/pages/InformationThemes.vue"
-import InformationCGACharacteristics from "@/pages/InformationCGACharacteristics.vue"
-import InformationData from "@/pages/InformationData.vue"
-import InformationCitation from "@/pages/InformationCitation.vue"
-import InformationGlossary from "@/pages/InformationGlossary.vue"
-import InformationNamingAuthorities from "@/pages/InformationNamingAuthorities.vue"
-import InformationStatistics from "@/pages/InformationStatistics.vue"
-import NewPlaceName from "@/pages/NewPlaceName.vue"
-import EditPlaceName from "@/pages/EditPlaceName.vue"
+const Main = () => import("../pages/Main.vue")
+const Search = () => import("../pages/Search.vue")
+const SearchResults = () => import("../pages/SearchResults.vue")
+const Download = () => import("../pages/Download.vue")
+const PlaceName = () => import("../pages/PlaceName.vue")
+const Information = () => import("../pages/Information.vue")
+const InformationGeneral = () => import("../pages/InformationGeneral.vue")
+const InformationBatchInstructions = () => import("../pages/InformationBatchInstructions.vue")
+const InformationHistory = () => import("../pages/InformationHistory.vue")
+const InformationThemes = () => import("../pages/InformationThemes.vue")
+const InformationCGACharacteristics = () => import("../pages/InformationCGACharacteristics.vue")
+const InformationData = () => import("../pages/InformationData.vue")
+const InformationCitation = () => import("../pages/InformationCitation.vue")
+const InformationGlossary = () => import("../pages/InformationGlossary.vue")
+const InformationNamingAuthorities = () => import("../pages/InformationNamingAuthorities.vue")
+const InformationStatistics = () => import("../pages/InformationStatistics.vue")
+const NewPlaceName = () => import("../pages/NewPlaceName.vue")
+const EditPlaceName = () => import("../pages/EditPlaceName.vue")
 
-import store from "@/store"
+import store from "../store"
 
 Vue.use(Router)
 Vue.use(Postgrest,
@@ -88,10 +90,16 @@ const router = new Router({
         {
             path: '/search',
             component: Search,
+            meta: {
+                sitemap: { ignoreRoute: true }
+            }
         },
         {
             path: '/search/results',
-            component: SearchResults     
+            component: SearchResults,
+            meta: {
+                sitemap: { ignoreRoute: true }
+            } 
         },
         {
             path: '/download',
@@ -99,17 +107,28 @@ const router = new Router({
         },
         {
             path: '/place-name/:id',
-            component: PlaceName
+            component: PlaceName,
+            meta: {
+                sitemap: {
+                    slugs: async () => await getPlaceIds()
+                }
+            }
         },
         {
             path: '/place-name/:id/edit',
             component: EditPlaceName,
-            meta: {requiresAdmin: true}
+            meta: {
+                requiresAdmin: true,
+                sitemap: { ignoreRoute: true }
+            }
         },
         {
             path: '/new-name',
             component: NewPlaceName,
-            meta: {requiresAdmin: true}
+            meta: {
+                requiresAdmin: true,
+                sitemap: { ignoreRoute: true }
+            }
         }
     ]
 })
@@ -125,5 +144,20 @@ router.beforeEach((to, from, next) => {
       next()
     }
   })
+
+
+  async function getPlaceIds() {
+    const agent = new https.Agent({  
+        rejectUnauthorized: false
+      });
+
+    const response = await axios.get('https://scartest.data.aad.gov.au/api/place_names?select=name_id', { httpsAgent: agent })
+  
+    const ids = response.data.map(n => {
+      return {id: n.name_id}
+    })
+
+    return ids
+  }
 
 export default router

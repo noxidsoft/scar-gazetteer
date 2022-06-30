@@ -74,7 +74,7 @@ export default {
 
             Object.assign(this.form_data, form_data)
 
-            this.form_data.$post({ return: 'minimal' })
+            this.pg.$put({ return: 'minimal' })
         }
     }
 }

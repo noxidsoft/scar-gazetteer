@@ -4,7 +4,7 @@
       <b-row>
         <b-col><img src="~@/assets/scar_logo_sm.gif" alt="S C A R" /></b-col>
         <b-col>
-          <h1>COMPOSITE GAZETTEER OF ANTARCTICA</h1>
+          <h1>SCAR COMPOSITE GAZETTEER OF ANTARCTICA</h1>
           <h2>ENEA - P.N.R.A.</h2>
         </b-col>
         <b-col><img src="~@/assets/pnra_logo_sm.png" alt="P N R A" /></b-col>
@@ -49,6 +49,9 @@
       </div>
     </div>
     <router-view />
+    <div class="footer">
+      <p><i>The SCAR Composite Gazetteer is hosted by the <a href="https://data.aad.gov.au">Australian Antarctic Data Centre</a></i></p>
+    </div>
   </b-container>
 </template>
 
@@ -110,5 +113,11 @@ export default {
 
 .form-control {
   margin: 0.5em;
+}
+
+.footer {
+  padding-top: 2em;
+  margin: 1.5em;
+  font-size: 9pt;
 }
 </style>

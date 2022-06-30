@@ -19,7 +19,7 @@
                 <b-form-input
                 id="latitude"
                 v-model="form_data.latitude"
-                type="number"
+                type="text"
                 required
                 />
             </b-form-group>
@@ -30,7 +30,7 @@
                 <b-form-input
                 id="longitude"
                 v-model="form_data.longitude"
-                type="number"
+                type="text"
                 required
                 />
             </b-form-group>
@@ -41,7 +41,7 @@
                 <b-form-input
                 id="coordinate_accuracy"
                 v-model="form_data.coordinate_accuracy"
-                type="number"
+                type="text"
                 />
             </b-form-group>
             <b-form-group
@@ -51,7 +51,7 @@
                 <b-form-input
                 id="altitude"
                 v-model="form_data.altitude"
-                type="number"
+                type="text"
                 />
             </b-form-group>
             <b-form-group
@@ -61,7 +61,7 @@
                 <b-form-input
                 id="altitude"
                 v-model="form_data.altitude_accuracy"
-                type="number"
+                type="text"
                 />
             </b-form-group>
             <b-form-group
@@ -112,7 +112,6 @@
                 id="feature_class"
                 v-model="form_data.scar_feature_class"
                 type="text"
-                required
                 />
             </b-form-group>
             <b-form-group
@@ -131,7 +130,6 @@
                 id="date_named"
                 v-model="form_data.date_named"
                 type="date"
-                required
                 />
             </b-form-group>
             <b-form-group
@@ -147,7 +145,7 @@
             </b-form-group>
             <br />
             <b-button  type="submit" variant="primary">Submit</b-button> 
-            <b-button variant="secondary">Reset</b-button>
+            <b-button variant="secondary" @click="reset">Reset</b-button>
         </b-form>
 </template>
 
@@ -202,6 +200,9 @@ export default {
         submit (event) {
             event.preventDefault()
             this.$emit('submit', this.form_data)
+        },
+        reset () {
+            this.$emit('reset')
         }
     }
 }
