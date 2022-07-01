@@ -38,7 +38,7 @@
                     :options="relics"
                 />
             </b-form-group>
-            <b-button type="submit" variant="primary">Search</b-button>
+            <b-button class="submit-button" type="submit" variant="primary">Search</b-button>
         </b-form>
     </b-container>
 </template>
@@ -104,5 +104,9 @@ export default {
 <style scoped>
 .search {
     max-width: 50em;
+}
+
+.submit-button {
+    margin-top: 1em;
 }
 </style>

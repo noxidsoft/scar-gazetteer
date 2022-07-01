@@ -34,13 +34,21 @@
               </b-navbar-nav>
 
               <b-navbar-nav class="nav-right">
-                <b-nav-form @submit="submit" v-if="!$store.state.user.isLoggedIn">
-                  <b-form-input size="sm" placeholder="Username" v-model="username"></b-form-input>
-                  <b-form-input size="sm" placeholder="Password" type="password" v-model="password"></b-form-input>
+                <div v-if="loginError">
+                  <b-icon-exclamation-diamond variant="danger" />
+                </div>
+                <b-nav-form @submit="submit" v-if="!isLoggedIn">
+                  <b-form-input 
+                    size="sm" 
+                    placeholder="Username" 
+                    v-model="form.username" 
+                    :state="formStatus"
+                  />
+                  <b-form-input size="sm" placeholder="Password" type="password" v-model="form.password" :state="formStatus"></b-form-input>
                   <b-button size ="sm" type="submit">Login</b-button>
                 </b-nav-form>
                 <div v-else class="form-inline">
-                    <b-nav-item>{{$store.state.user.username}}</b-nav-item>
+                    <b-nav-item>{{username}}</b-nav-item>
                     <b-button size="sm" @click="logout">Logout</b-button>
                 </div>
               </b-navbar-nav>
@@ -56,7 +64,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { setDefaultToken } from 'vue-postgrest'
 
 export default {
@@ -77,8 +85,11 @@ export default {
   },
   data: function() {
     return {
-      username: '',
-      password: ''
+      form: {
+        username: '',
+        password: '',
+        submitted: false
+      }
     }
   },
   methods: {
@@ -88,8 +99,21 @@ export default {
       'logout'
     ]),
     submit: function(event) {
+      this.form.submitted = true
       event.preventDefault()
-      this.authenticate({username: this.username, password: this.password})
+      this.authenticate({username: this.form.username, password: this.form.password})
+      this.form.password = ''
+    }
+  },
+  computed: {
+    ...mapState('user', [
+      'isLoggedIn',
+      'loginError',
+      'username'
+    ]),
+    formStatus: function () {
+      console.log(`${this.form.submitted}`)
+      return this.form.submitted && this.loginError ? false : null
     }
   },
   mounted: function() {
@@ -118,6 +142,12 @@ export default {
 }
 
 .form-inline {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.form-group {
     display: flex;
     flex-direction: row;
     align-items: center;

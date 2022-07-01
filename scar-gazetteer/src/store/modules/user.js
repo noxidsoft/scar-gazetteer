@@ -33,7 +33,8 @@ export default {
         username: '',
         email_address: '',
         isAdmin: false,
-        token: ''
+        token: '',
+        loginError: false
     },
     getters: {
         getToken: (state) => {
@@ -52,18 +53,27 @@ export default {
             state.username = ''
             state.isAdmin = false
             state.token = ''
+        },
+        setError: (state, isError) => {
+            state.loginError = isError
         }
     },
     actions: {
-        async authenticate({dispatch}, loginInfo) {
-            let response = await axios.post(`/user/api/authenticate`, loginInfo)
+        async authenticate({dispatch, commit}, loginInfo) {
+            try {
+                commit('setError', false)
+                let response = await axios.post(`/user/api/authenticate`, loginInfo)
 
-            Cookie.set(JWT_TOKEN, response.data.token, {
-                expires: new Date(response.data.expires),
-                secure: location.protocol === 'https:'
-              })
+                Cookie.set(JWT_TOKEN, response.data.token, {
+                    expires: new Date(response.data.expires),
+                    secure: location.protocol === 'https:'
+                })
 
-            dispatch('checkLoggedIn')
+                dispatch('checkLoggedIn')
+            } catch (error) {
+                console.log(`Login Error: ${error}` )
+                commit('setError', true)
+            }
         },
         checkLoggedIn({commit}) {
             const token = getToken()
@@ -92,8 +102,9 @@ export default {
                 commit('logout')
             }
         },
-        logout({dispatch}){
+        logout({dispatch, commit}){
             Cookie.remove(JWT_TOKEN)
+            commit('setError', false)
             dispatch('checkLoggedIn')
             window.location = '/'
         }
