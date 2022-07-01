@@ -147,12 +147,6 @@ export default {
     align-items: center;
 }
 
-.form-group {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
 .form-control {
   margin: 0.5em;
 }
