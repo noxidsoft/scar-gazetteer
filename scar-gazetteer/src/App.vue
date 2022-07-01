@@ -12,7 +12,7 @@
       <b-row>
         <p>
           <a href="http://www.scar.org">Scientific Committee on Antarctic Research (SCAR)</a><br />
-          Collated by <a href="http://www.pnra.it">Programma Nazionale di Ricerche in Antartide</a> (Italy)<br />
+          Collated by <a href="http://www.pnra.aq">Programma Nazionale di Ricerche in Antartide</a> (Italy)<br />
           in the framework of the SCAR <a href="http://www.scar.org/data-products/scagi">Standing Committee on Antarctic Geographic Information (SCAGI)</a>
         </p>
       </b-row>
