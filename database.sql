@@ -112,6 +112,11 @@ CREATE OR REPLACE VIEW gazetteer.name_count
   GROUP BY p.gazetteer, g.country
   ORDER BY g.country;
 
+CREATE OR REPLACE VIEW gazetteer.gaz_count
+AS
+SELECT count(name_id) as name_count, count(DISTINCT place_id) as place_count
+from gazetteer.place_names
+
 CREATE ROLE scar_admin nologin;
 
 ALTER TABLE gazetteer.place_names ENABLE ROW LEVEL SECURITY;
@@ -132,6 +137,7 @@ GRANT SELECT on gazetteer.place_names to public_user, scar_admin;
 GRANT SELECT on gazetteer.glossary to public_user, scar_admin;
 GRANT SELECT on gazetteer.gazetteers to public_user, scar_admin;
 GRANT SELECT on gazetteer.name_count to public_user, scar_admin;
+GRANT SELECT on gazetteer.gaz_count to public_user, scar_admin;
 GRANT SELECT on gazetteer.feature_types to public_user, scar_admin;
 
 GRANT INSERT, UPDATE on gazetteer.place_names to scar_admin;
@@ -168,3 +174,5 @@ CREATE OR REPLACE FUNCTION gazetteer.search(
             OR name_id::text = search_text;
         end;
     $$;
+
+

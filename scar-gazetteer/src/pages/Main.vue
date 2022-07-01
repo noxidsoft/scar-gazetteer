@@ -25,6 +25,7 @@
 
 <script>
 import dayjs from 'dayjs'
+import axios from 'axios'
 
 export default {
     name: "Main",
@@ -69,6 +70,13 @@ export default {
                 }
             }]
         }
+    },
+    mounted: async function () {
+        const response = await axios.get('/api/gaz_count')
+        console.log(response.data)
+
+        this.name_count = response.data[0].name_count
+        this.feature_count = response.data[0].place_count
     }
 }
 </script>
