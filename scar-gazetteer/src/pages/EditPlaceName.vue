@@ -32,6 +32,7 @@ export default {
             Object.assign(this.form_data, form_data)
 
             this.form_data.$put({ return: 'minimal' })
+            this.$router.push({ path: `/place-name/${this.form_data.name_id}` })
         },
         reset () {
             this.form_data.$get()

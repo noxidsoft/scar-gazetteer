@@ -17,6 +17,7 @@ export default {
     data: function () { 
         return {
             form_data: {
+                "name_id": null,
                 "latitude": 0,
                 "longitude": 0,
                 "altitude": null,
@@ -30,8 +31,6 @@ export default {
                 "place_id": null,
                 "coordinate_accuracy": null,
                 "altitude_accuracy": null,
-                "source_authority": null,
-                "source_person": null,
                 "accepted_by": null,
                 "source_country_code": null,
                 "source_name": null,
@@ -63,18 +62,23 @@ export default {
             }
         }
     },
-    mounted: async function() {
-        console.log(this.pg)
-        let next_id = this.pg.name_id + 1
-        this.form_data.name_id = next_id
-    },
     methods: {
-        submit (form_data) {
-            console.log(form_data)
+        async submit (form_data) {
+
+            let next_id = parseInt(this.pg.name_id) + 1
+            this.form_data.name_id = next_id
 
             Object.assign(this.form_data, form_data)
 
-            this.pg.$put({ return: 'minimal' })
+            try {
+                await this.$postgrest.$route('place_names').post({}, {}, this.form_data)
+
+                this.$router.push({ path: `/place-name/${this.form_data.name_id}` })
+            } catch (error) {
+                console.log(error)
+
+                // TODO: Signal Error Somewhere
+            }
         }
     }
 }

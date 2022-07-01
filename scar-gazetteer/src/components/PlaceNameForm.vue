@@ -337,9 +337,9 @@ export default {
         submit (event) {
             event.preventDefault()
 
-            this.$v.form.$touch();
-            if (this.$v.form.$anyError) {
-                return;
+            this.$v.form_data.$touch()
+            if (this.$v.form_data.$anyError) {
+                return
             }
 
             this.$emit('submit', this.form_data)
