@@ -23,6 +23,16 @@
                     <b-badge>Name ID: {{p.item.name_id}}</b-badge> <b-badge>Place ID: {{p.item.place_id}}</b-badge>
                 </div>
             </template>
+            <template #cell(latitude)="lat">
+                <div>
+                    {{lat.item.latitude}}°
+                </div>
+            </template>
+            <template #cell(longitude)="lon">
+                <div>
+                    {{lon.item.longitude}}°
+                </div>
+            </template>
             <template #cell(feature_types)="f">
                 <div v-if="f.item.feature_types">
                     <a :href="`https://data.aad.gov.au/aadc/ftc/display_feature_type.cfm?feature_type_code=${f.item.feature_types.feature_type_code}`">{{f.item.feature_types.feature_type_name}}</a>

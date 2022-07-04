@@ -50,9 +50,9 @@ export default {
                     "name": 'SCAR Composite Gazetteer of Antarctica',
                     "sourceOrganization" : {
                         "@type": "Organization",
-                        "name": "Scientific Committee on Antarctic Research (SCAR)",
-                        "url": "https://scar.org",
-                        "logo": "https://scar.org/templates/it_headlines/custom/images/SCAR_logo_2018_white_background.png"
+                        "name": "PROGRAMMA NAZIONALE DI RICERCHE IN ANTARTIDE",
+                        "url": "https://www.pnra.aq/",
+                        "logo": "https://www.pnra.aq/themes/basic/logo.png"
                     },
                     "publisher": {
                         "@type": "Organization",
@@ -66,6 +66,11 @@ export default {
                             "@type": "GeoShape",
                             "box": "-90 180 -60 -180"
                         }
+                    },
+                    "potentialAction": {
+                        "@type": "SearchAction",
+                        "target": "https://placenames.aq/search/results?search_text={search_term_string}",
+                        "query-input": "required name=search_term_string"
                     }
                 }
             }]

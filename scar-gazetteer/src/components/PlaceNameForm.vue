@@ -310,7 +310,7 @@ export default {
     mounted: async function() {
         this.form_data = this.form
 
-        let response = await axios.get('/api/gazetteers')
+        let response = await axios.get('/api/gazetteers?order=country.asc')
         let gaz = response.data
 
         let formatted = gaz.map(g => {
@@ -319,7 +319,7 @@ export default {
 
         this.lists.gazetteers = this.lists.gazetteers.concat(formatted)
 
-        let response2 = await axios.get('/api/feature_types')
+        let response2 = await axios.get('/api/feature_types?feature_type_code=neq.0&order=feature_type_name.asc')
         let feat = response2.data
 
         let formatted2 = feat.map(f => {
