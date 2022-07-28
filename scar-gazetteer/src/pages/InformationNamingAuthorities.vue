@@ -4,8 +4,9 @@
         <div v-for="gaz of gazetteers" :key="gaz.gazetteer_id">
             <h3>{{gaz.country}}</h3>
             <p>
-                <span v-if="gaz.national_authority">{{gaz.national_authority}},</span> 
-                <a :href="gaz.names_urn" v-if="gaz.names_urn">{{gaz.agency}}</a><span v-else>{{gaz.agency}}</span></p>
+                <span v-if="gaz.national_authority">{{gaz.national_authority}}</span><br /> 
+                <a :href="gaz.names_urn" v-if="gaz.names_urn">{{gaz.agency}}</a><span v-else>{{gaz.agency}}</span>
+            </p>
         </div>
     </b-container>
 </template>
