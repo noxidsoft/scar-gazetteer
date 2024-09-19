@@ -1,9 +1,9 @@
- CREATE EXTENSION unaccent;
+CREATE EXTENSION unaccent;
 
 CREATE TABLE IF NOT EXISTS gazetteer.gazetteers
 (
     gazetteer_id numeric(10,0) NOT NULL,
-    gazetteer_code character varying(100) COLLATE pg_catalog."default", 
+    gazetteer_code character varying(100) COLLATE pg_catalog."default",
     gazetteer_name character varying(100) COLLATE pg_catalog."default",
     national_authority character varying(100) COLLATE pg_catalog."default",
     agency character varying(100) COLLATE pg_catalog."default",
@@ -174,5 +174,3 @@ CREATE OR REPLACE FUNCTION gazetteer.search(
             OR name_id::text = search_text;
         end;
     $$;
-
-
